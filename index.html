@@ -209,7 +209,7 @@
       </div>
       <div class="item" data-id="i2">
         <span class="handle" data-role="handle">⠿</span>
-        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
         <span class="label" contenteditable="true" data-role="label">Escrever</span>
         <span class="remove-item" data-role="remove">✕</span>
       </div>
@@ -252,7 +252,7 @@
       </div>
       <div class="item" data-id="i8">
         <span class="handle" data-role="handle">⠿</span>
-        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
         <span class="label" contenteditable="true" data-role="label">Escrever</span>
         <span class="remove-item" data-role="remove">✕</span>
       </div>
@@ -277,7 +277,7 @@
       </div>
       <div class="item" data-id="i11">
         <span class="handle" data-role="handle">⠿</span>
-        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
         <span class="label" contenteditable="true" data-role="label">Escrever</span>
         <span class="remove-item" data-role="remove">✕</span>
       </div>
@@ -314,7 +314,7 @@
       </div>
       <div class="item" data-id="i16">
         <span class="handle" data-role="handle">⠿</span>
-        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
         <span class="label" contenteditable="true" data-role="label">Escrever</span>
         <span class="remove-item" data-role="remove">✕</span>
       </div>
@@ -339,7 +339,7 @@
       </div>
       <div class="item" data-id="i19">
         <span class="handle" data-role="handle">⠿</span>
-        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
         <span class="label" contenteditable="true" data-role="label">Escrever</span>
         <span class="remove-item" data-role="remove">✕</span>
       </div>
@@ -382,7 +382,7 @@
       </div>
       <div class="item" data-id="i25">
         <span class="handle" data-role="handle">⠿</span>
-        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
         <span class="label" contenteditable="true" data-role="label">Escrever</span>
         <span class="remove-item" data-role="remove">✕</span>
       </div>
@@ -394,7 +394,7 @@
       </div>
       <div class="item" data-id="i27">
         <span class="handle" data-role="handle">⠿</span>
-        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="dot creative" data-role="dot" title="toque para trocar categoria"></span>
         <span class="label" contenteditable="true" data-role="label">Look + maquiagem diferente</span>
         <span class="remove-item" data-role="remove">✕</span>
       </div>
@@ -419,7 +419,7 @@
       </div>
       <div class="item" data-id="i30">
         <span class="handle" data-role="handle">⠿</span>
-        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
         <span class="label" contenteditable="true" data-role="label">Escrever · planejamento da semana</span>
         <span class="remove-item" data-role="remove">✕</span>
       </div>
@@ -455,10 +455,10 @@
 </div>
 
 <script>
-const STORAGE_KEY = 'rotina-guia-v7';
+const STORAGE_KEY = 'rotina-guia-v9';
 const CATS = ["movement", "mind", "social", "self", "creative", "study"];
 
-const defaultDays = [{"name": "Segunda", "note": "", "items": [{"id": "i1", "t": "Pilates", "c": "movement"}, {"id": "i2", "t": "Escrever", "c": "mind"}, {"id": "i3", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i4", "t": "Curso WOMA", "c": "study"}, {"id": "i5", "t": "Cinema · 1x ao mês", "c": "self"}]}, {"name": "Terça", "note": "", "items": [{"id": "i6", "t": "Pole Dance", "c": "movement"}, {"id": "i7", "t": "Yoga", "c": "movement"}, {"id": "i8", "t": "Escrever", "c": "mind"}, {"id": "i9", "t": "Espanhol", "c": "study"}]}, {"name": "Quarta", "note": "", "items": [{"id": "i10", "t": "Pilates", "c": "movement"}, {"id": "i11", "t": "Escrever", "c": "mind"}, {"id": "i12", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i13", "t": "Curso ❤️‍🔥", "c": "study"}]}, {"name": "Quinta", "note": "", "items": [{"id": "i14", "t": "Pole Dance", "c": "movement"}, {"id": "i15", "t": "Yoga", "c": "movement"}, {"id": "i16", "t": "Escrever", "c": "mind"}, {"id": "i17", "t": "Galeria", "c": "study"}]}, {"name": "Sexta", "note": "Sair com amigas pode virar 2x na semana, se quiser.", "items": [{"id": "i18", "t": "Pilates", "c": "movement"}, {"id": "i19", "t": "Escrever", "c": "mind"}, {"id": "i20", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i21", "t": "Terapia", "c": "mind"}, {"id": "i22", "t": "Séries", "c": "self"}, {"id": "i23", "t": "Sair com amigas", "c": "social"}]}, {"name": "Sábado", "note": "Pole dance é opcional aqui — só se a semana pedir.", "items": [{"id": "i24", "t": "Pole dance (opcional)", "c": "movement"}, {"id": "i25", "t": "Escrever", "c": "mind"}, {"id": "i26", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i27", "t": "Look + maquiagem diferente", "c": "self"}, {"id": "i28", "t": "Fotografar, se sair de casa", "c": "creative"}]}, {"name": "Domingo", "note": "Dia reserva de yoga, se não rolou na semana.", "items": [{"id": "i29", "t": "Yoga ou descanso ativo", "c": "movement"}, {"id": "i30", "t": "Escrever · planejamento da semana", "c": "mind"}, {"id": "i31", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i32", "t": "Astrologia · sessão longa", "c": "study"}, {"id": "i33", "t": "Bloco criativo: colagem, junk journal, desenho ou pintura", "c": "creative"}]}];
+const defaultDays = [{"name": "Segunda", "note": "", "items": [{"id": "i1", "t": "Pilates", "c": "movement"}, {"id": "i2", "t": "Escrever", "c": "self"}, {"id": "i3", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i4", "t": "Curso WOMA", "c": "study"}, {"id": "i5", "t": "Cinema · 1x ao mês", "c": "self"}]}, {"name": "Terça", "note": "", "items": [{"id": "i6", "t": "Pole Dance", "c": "movement"}, {"id": "i7", "t": "Yoga", "c": "movement"}, {"id": "i8", "t": "Escrever", "c": "self"}, {"id": "i9", "t": "Espanhol", "c": "study"}]}, {"name": "Quarta", "note": "", "items": [{"id": "i10", "t": "Pilates", "c": "movement"}, {"id": "i11", "t": "Escrever", "c": "self"}, {"id": "i12", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i13", "t": "Curso ❤️‍🔥", "c": "study"}]}, {"name": "Quinta", "note": "", "items": [{"id": "i14", "t": "Pole Dance", "c": "movement"}, {"id": "i15", "t": "Yoga", "c": "movement"}, {"id": "i16", "t": "Escrever", "c": "self"}, {"id": "i17", "t": "Galeria", "c": "study"}]}, {"name": "Sexta", "note": "Sair com amigas pode virar 2x na semana, se quiser.", "items": [{"id": "i18", "t": "Pilates", "c": "movement"}, {"id": "i19", "t": "Escrever", "c": "self"}, {"id": "i20", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i21", "t": "Terapia", "c": "mind"}, {"id": "i22", "t": "Séries", "c": "self"}, {"id": "i23", "t": "Sair com amigas", "c": "social"}]}, {"name": "Sábado", "note": "Pole dance é opcional aqui — só se a semana pedir.", "items": [{"id": "i24", "t": "Pole dance (opcional)", "c": "movement"}, {"id": "i25", "t": "Escrever", "c": "self"}, {"id": "i26", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i27", "t": "Look + maquiagem diferente", "c": "creative"}, {"id": "i28", "t": "Fotografar, se sair de casa", "c": "creative"}]}, {"name": "Domingo", "note": "Dia reserva de yoga, se não rolou na semana.", "items": [{"id": "i29", "t": "Yoga ou descanso ativo", "c": "movement"}, {"id": "i30", "t": "Escrever · planejamento da semana", "c": "self"}, {"id": "i31", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i32", "t": "Astrologia · sessão longa", "c": "study"}, {"id": "i33", "t": "Bloco criativo: colagem, junk journal, desenho ou pintura", "c": "creative"}]}];
 
 let days = JSON.parse(JSON.stringify(defaultDays));
 let idCounter = 33;
