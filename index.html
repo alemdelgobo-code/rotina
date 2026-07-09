@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rotina">
+<title>Rotina da Semana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B1A2E;
+    --card: #242240;
+    --card-edge: #34314f;
+    --text: #F2EFE9;
+    --text-dim: #ADA9C7;
+    --gold: #E8B75D;
+    --rose: #D46A6A;
+    --sage: #8FAE92;
+    --sky: #7C9BC9;
+    --lilac: #B98BC9;
+    --teal: #4FBDBA;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background: radial-gradient(ellipse at top, #232145 0%, #17162A 60%, #121122 100%);
+    color: var(--text);
+    font-family: 'Work Sans', sans-serif;
+    min-height: 100vh;
+    padding: 40px 18px 70px;
+  }
+  .wrap{ max-width: 720px; margin: 0 auto; }
+
+  header{ text-align:center; margin-bottom: 40px; }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(28px, 8vw, 44px);
+    line-height: 1.05;
+  }
+  h1 em{ font-style: italic; font-weight: 500; color: var(--rose); }
+  .subtitle{ color: var(--text-dim); font-size: 14px; margin-top: 14px; }
+
+  .legend{
+    display:flex; justify-content:center; gap: 16px; flex-wrap:wrap;
+    margin: 26px 0 34px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-dim);
+  }
+  .legend .dot{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; vertical-align:middle; }
+
+  .day{
+    background: var(--card);
+    border: 1px solid var(--card-edge);
+    border-radius: 14px;
+    padding: 18px 16px;
+    margin-bottom: 14px;
+  }
+  .day h2{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .items{ display:flex; flex-direction:column; }
+  .item{
+    display:flex; align-items:center; gap:8px;
+    padding: 8px 0;
+    border-top: 1px solid var(--card-edge);
+    font-size: 14px;
+    line-height: 1.4;
+    background: var(--card);
+    touch-action: pan-y;
+  }
+  .item:first-child{ border-top:none; }
+  .item.dragging{ opacity: 0.5; }
+
+  .handle{
+    color: var(--text-dim);
+    font-size: 15px;
+    cursor: grab;
+    padding: 2px 4px;
+    flex-shrink:0;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; cursor:pointer; }
+
+  .movement{ background: var(--rose); }
+  .mind{ background: var(--sage); }
+  .social{ background: var(--sky); }
+  .self{ background: var(--gold); }
+  .creative{ background: var(--lilac); }
+  .study{ background: var(--teal); }
+
+  .label{
+    flex: 1;
+    outline: none;
+    border-bottom: 1px dashed transparent;
+    cursor: text;
+  }
+  .label:hover{ border-bottom: 1px dashed var(--text-dim); }
+  .label:focus{ border-bottom: 1px dashed var(--gold); }
+
+  .remove-item{
+    opacity: 0;
+    color: var(--text-dim);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 2px;
+    flex-shrink: 0;
+  }
+  .item:hover .remove-item{ opacity: 0.6; }
+  .remove-item:hover{ opacity: 1 !important; color: var(--rose); }
+
+  .add-item{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    background: none;
+    border: 1px dashed var(--card-edge);
+    border-radius: 8px;
+    padding: 7px 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  .add-item:hover{ color: var(--gold); border-color: var(--gold); }
+
+  .note{
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family:'Fraunces', serif;
+    outline: none;
+    border-bottom: 1px dashed transparent;
+    min-height: 16px;
+    cursor: text;
+  }
+  .note:hover{ border-bottom: 1px dashed var(--card-edge); }
+  .note:focus{ border-bottom: 1px dashed var(--gold); }
+  .note:empty::before{
+    content: '+ adicionar observação';
+    opacity: 0.5;
+  }
+
+  footer{
+    text-align:center;
+    margin-top: 40px;
+    color: var(--text-dim);
+    font-size: 11.5px;
+    font-family:'JetBrains Mono', monospace;
+    line-height:1.8;
+  }
+  footer strong{ color: var(--gold); font-weight:500; }
+
+  .save-bar{
+    text-align:center;
+    margin: 20px 0 0;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    min-height: 16px;
+  }
+  .save-bar.show{ color: var(--sage); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Mapa da semana</div>
+    <h1>Sua rotina, <em>em órbita</em></h1>
+    <p class="subtitle">Seu guia fixo — não muda toda semana, só quando você quiser.</p>
+  </header>
+
+  <div class="legend">
+    <span><span class="dot movement"></span>Movimento</span>
+    <span><span class="dot mind"></span>Mente</span>
+    <span><span class="dot social"></span>Social</span>
+    <span><span class="dot self"></span>Ritual pessoal</span>
+    <span><span class="dot creative"></span>Criativo</span>
+    <span><span class="dot study"></span>Estudo</span>
+  </div>
+
+  <div id="grid">
+  <div class="day">
+    <h2>Segunda</h2>
+    <div class="items">
+      <div class="item" data-id="i1">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Pilates</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i2">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Escrever</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i3">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Leitura</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i4">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot study" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Curso WOMA</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i5">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Cinema · 1x ao mês</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+    </div>
+    <button class="add-item" data-role="add">+ adicionar item</button>
+    <div class="note" contenteditable="true" data-role="note"></div>
+  </div>
+  <div class="day">
+    <h2>Terça</h2>
+    <div class="items">
+      <div class="item" data-id="i6">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Pole Dance</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i7">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Yoga</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i8">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Escrever</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i9">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot study" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Espanhol</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+    </div>
+    <button class="add-item" data-role="add">+ adicionar item</button>
+    <div class="note" contenteditable="true" data-role="note"></div>
+  </div>
+  <div class="day">
+    <h2>Quarta</h2>
+    <div class="items">
+      <div class="item" data-id="i10">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Pilates</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i11">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Escrever</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i12">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Leitura</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i13">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot study" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Curso WOMA</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i14">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Cinema · 1x ao mês</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i15">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot study" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Curso ❤️‍🔥</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+    </div>
+    <button class="add-item" data-role="add">+ adicionar item</button>
+    <div class="note" contenteditable="true" data-role="note"></div>
+  </div>
+  <div class="day">
+    <h2>Quinta</h2>
+    <div class="items">
+      <div class="item" data-id="i16">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Pole Dance</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i17">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Yoga</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i18">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Escrever</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i19">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot study" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Espanhol</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i20">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot creative" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Galeria</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+    </div>
+    <button class="add-item" data-role="add">+ adicionar item</button>
+    <div class="note" contenteditable="true" data-role="note"></div>
+  </div>
+  <div class="day">
+    <h2>Sexta</h2>
+    <div class="items">
+      <div class="item" data-id="i21">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Pilates</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i22">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Escrever</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i23">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Leitura</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i24">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot study" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Curso WOMA</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i25">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Cinema · 1x ao mês</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i26">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Terapia</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i27">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot social" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Sair com amigas</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+    </div>
+    <button class="add-item" data-role="add">+ adicionar item</button>
+    <div class="note" contenteditable="true" data-role="note"></div>
+  </div>
+  <div class="day">
+    <h2>Sábado</h2>
+    <div class="items">
+      <div class="item" data-id="i28">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Pole dance (opcional)</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i29">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Leitura · 50 páginas</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i30">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot social" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Sair com amigas</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i31">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot self" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Look + maquiagem diferente</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i32">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot creative" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Fotografar, se sair de casa</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i33">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Escrever</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+    </div>
+    <button class="add-item" data-role="add">+ adicionar item</button>
+    <div class="note" contenteditable="true" data-role="note">Pole dance é opcional aqui — só se a semana pedir. Sair com amigas pode virar 2x na semana, se quiser.</div>
+  </div>
+  <div class="day">
+    <h2>Domingo</h2>
+    <div class="items">
+      <div class="item" data-id="i34">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot movement" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Yoga ou descanso ativo</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i35">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot study" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Astrologia · sessão longa</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i36">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot mind" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Escrever · planejamento da semana</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+      <div class="item" data-id="i37">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot creative" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">Bloco criativo: colagem, junk journal ou pintura</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+    </div>
+    <button class="add-item" data-role="add">+ adicionar item</button>
+    <div class="note" contenteditable="true" data-role="note">Dia reserva de yoga, se não rolou na semana.</div>
+  </div>
+  </div>
+  <div class="save-bar" id="saveBar"></div>
+
+  <footer>
+    Segure o ícone <strong>⠿</strong> e arraste pra reordenar · toque na bolinha pra trocar categoria · toque na observação pra editar<br>
+    <strong>Trilha & escalada</strong> ficam de fora — reserve 1 fim de semana a cada 2–3 meses.
+  </footer>
+</div>
+
+<script>
+const STORAGE_KEY = 'rotina-guia-v4';
+const CATS = ["movement", "mind", "social", "self", "creative", "study"];
+
+const defaultDays = [{"name": "Segunda", "note": "", "items": [{"id": "i1", "t": "Pilates", "c": "movement"}, {"id": "i2", "t": "Escrever", "c": "mind"}, {"id": "i3", "t": "Leitura", "c": "mind"}, {"id": "i4", "t": "Curso WOMA", "c": "study"}, {"id": "i5", "t": "Cinema · 1x ao mês", "c": "self"}]}, {"name": "Terça", "note": "", "items": [{"id": "i6", "t": "Pole Dance", "c": "movement"}, {"id": "i7", "t": "Yoga", "c": "movement"}, {"id": "i8", "t": "Escrever", "c": "mind"}, {"id": "i9", "t": "Espanhol", "c": "study"}]}, {"name": "Quarta", "note": "", "items": [{"id": "i10", "t": "Pilates", "c": "movement"}, {"id": "i11", "t": "Escrever", "c": "mind"}, {"id": "i12", "t": "Leitura", "c": "mind"}, {"id": "i13", "t": "Curso WOMA", "c": "study"}, {"id": "i14", "t": "Cinema · 1x ao mês", "c": "self"}, {"id": "i15", "t": "Curso ❤️‍🔥", "c": "study"}]}, {"name": "Quinta", "note": "", "items": [{"id": "i16", "t": "Pole Dance", "c": "movement"}, {"id": "i17", "t": "Yoga", "c": "movement"}, {"id": "i18", "t": "Escrever", "c": "mind"}, {"id": "i19", "t": "Espanhol", "c": "study"}, {"id": "i20", "t": "Galeria", "c": "creative"}]}, {"name": "Sexta", "note": "", "items": [{"id": "i21", "t": "Pilates", "c": "movement"}, {"id": "i22", "t": "Escrever", "c": "mind"}, {"id": "i23", "t": "Leitura", "c": "mind"}, {"id": "i24", "t": "Curso WOMA", "c": "study"}, {"id": "i25", "t": "Cinema · 1x ao mês", "c": "self"}, {"id": "i26", "t": "Terapia", "c": "self"}, {"id": "i27", "t": "Sair com amigas", "c": "social"}]}, {"name": "Sábado", "note": "Pole dance é opcional aqui — só se a semana pedir. Sair com amigas pode virar 2x na semana, se quiser.", "items": [{"id": "i28", "t": "Pole dance (opcional)", "c": "movement"}, {"id": "i29", "t": "Leitura · 50 páginas", "c": "mind"}, {"id": "i30", "t": "Sair com amigas", "c": "social"}, {"id": "i31", "t": "Look + maquiagem diferente", "c": "self"}, {"id": "i32", "t": "Fotografar, se sair de casa", "c": "creative"}, {"id": "i33", "t": "Escrever", "c": "mind"}]}, {"name": "Domingo", "note": "Dia reserva de yoga, se não rolou na semana.", "items": [{"id": "i34", "t": "Yoga ou descanso ativo", "c": "movement"}, {"id": "i35", "t": "Astrologia · sessão longa", "c": "study"}, {"id": "i36", "t": "Escrever · planejamento da semana", "c": "mind"}, {"id": "i37", "t": "Bloco criativo: colagem, junk journal ou pintura", "c": "creative"}]}];
+
+let days = JSON.parse(JSON.stringify(defaultDays));
+let idCounter = 37;
+const grid = document.getElementById('grid');
+const saveBar = document.getElementById('saveBar');
+
+let saveTimeout = null;
+function flashSaved(){
+  saveBar.textContent = 'salvo ✓';
+  saveBar.classList.add('show');
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => saveBar.classList.remove('show'), 1200);
+}
+
+function persist(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(days));
+    flashSaved();
+  }catch(err){
+    console.error('Erro ao salvar:', err);
+    saveBar.textContent = 'não foi possível salvar';
+  }
+}
+
+function load(){
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if(saved){
+      days = JSON.parse(saved);
+      render();
+    }
+    // se não há nada salvo, o HTML estático já mostra os dados corretos
+  }catch(err){
+    // mantém o HTML estático
+  }
+}
+
+function cycleCategory(current){
+  const idx = CATS.indexOf(current);
+  return CATS[(idx + 1) % CATS.length];
+}
+
+function findItem(id){
+  for(const day of days){
+    const item = day.items.find(it => it.id === id);
+    if(item) return item;
+  }
+  return null;
+}
+
+function findDayOfItem(id){
+  return days.find(day => day.items.some(it => it.id === id));
+}
+
+function render(){
+  grid.innerHTML = '';
+  days.forEach((day) => {
+    const el = document.createElement('div');
+    el.className = 'day';
+    const itemsHtml = day.items.map(it => `
+      <div class="item" data-id="${it.id}">
+        <span class="handle" data-role="handle">⠿</span>
+        <span class="dot ${it.c}" data-role="dot" title="toque para trocar categoria"></span>
+        <span class="label" contenteditable="true" data-role="label">${it.t}</span>
+        <span class="remove-item" data-role="remove">✕</span>
+      </div>
+    `).join('');
+    el.innerHTML = `
+      <h2>${day.name}</h2>
+      <div class="items">${itemsHtml}</div>
+      <button class="add-item" data-role="add">+ adicionar item</button>
+      <div class="note" contenteditable="true" data-role="note">${day.note || ''}</div>
+    `;
+    grid.appendChild(el);
+  });
+}
+
+// --- clique: adicionar / remover / trocar categoria ---
+grid.addEventListener('click', (e) => {
+  const addBtn = e.target.closest('[data-role="add"]');
+  if(addBtn){
+    const dayEl = addBtn.closest('.day');
+    const dayName = dayEl.querySelector('h2').textContent;
+    const day = days.find(d => d.name === dayName);
+    idCounter++;
+    day.items.push({ id: 'i' + idCounter, t: 'Novo item', c: 'self' });
+    render();
+    persist();
+    return;
+  }
+
+  const removeBtn = e.target.closest('[data-role="remove"]');
+  if(removeBtn){
+    const item = removeBtn.closest('.item');
+    const id = item.dataset.id;
+    const day = findDayOfItem(id);
+    day.items = day.items.filter(it => it.id !== id);
+    render();
+    persist();
+    return;
+  }
+
+  const dot = e.target.closest('[data-role="dot"]');
+  if(dot){
+    const item = dot.closest('.item');
+    const id = item.dataset.id;
+    const obj = findItem(id);
+    obj.c = cycleCategory(obj.c);
+    render();
+    persist();
+    return;
+  }
+});
+
+// --- edição de texto (itens e observações) ---
+grid.addEventListener('blur', (e) => {
+  const label = e.target.closest('[data-role="label"]');
+  if(label){
+    const item = label.closest('.item');
+    const id = item.dataset.id;
+    const obj = findItem(id);
+    const newText = label.textContent.trim();
+    if(newText){
+      obj.t = newText;
+    } else {
+      label.textContent = obj.t;
+    }
+    persist();
+    return;
+  }
+
+  const noteEl = e.target.closest('[data-role="note"]');
+  if(noteEl){
+    const dayEl = noteEl.closest('.day');
+    const dayName = dayEl.querySelector('h2').textContent;
+    const day = days.find(d => d.name === dayName);
+    day.note = noteEl.textContent.trim();
+    persist();
+    return;
+  }
+}, true);
+
+// --- arrastar para reordenar (pointer events, funciona em touch e mouse) ---
+let dragEl = null;
+
+grid.addEventListener('pointerdown', (e) => {
+  const handle = e.target.closest('[data-role="handle"]');
+  if(!handle) return;
+  dragEl = handle.closest('.item');
+  dragEl.classList.add('dragging');
+  dragEl.setPointerCapture(e.pointerId);
+  e.preventDefault();
+});
+
+grid.addEventListener('pointermove', (e) => {
+  if(!dragEl) return;
+  const dayEl = dragEl.closest('.day');
+  const itemsContainer = dayEl.querySelector('.items');
+  const siblings = [...itemsContainer.querySelectorAll('.item')].filter(el => el !== dragEl);
+  const y = e.clientY;
+  let next = null;
+  for(const sib of siblings){
+    const box = sib.getBoundingClientRect();
+    if(y < box.top + box.height / 2){ next = sib; break; }
+  }
+  if(next) itemsContainer.insertBefore(dragEl, next);
+  else itemsContainer.appendChild(dragEl);
+});
+
+function endDrag(e){
+  if(!dragEl) return;
+  dragEl.classList.remove('dragging');
+  const dayEl = dragEl.closest('.day');
+  const dayName = dayEl.querySelector('h2').textContent;
+  const day = days.find(d => d.name === dayName);
+  const itemsContainer = dayEl.querySelector('.items');
+  const newIds = [...itemsContainer.querySelectorAll('.item')].map(el => el.dataset.id);
+  day.items = newIds.map(id => day.items.find(it => it.id === id));
+  dragEl = null;
+  persist();
+}
+grid.addEventListener('pointerup', endDrag);
+grid.addEventListener('pointercancel', endDrag);
+
+load();
+</script>
+</body>
+</html>
